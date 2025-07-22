@@ -7,17 +7,21 @@ export type BorrowDocument = HydratedDocument<Borrow>;
 
 @Schema()
 export class Borrow {
-  @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'Book' })
+  @Prop({
+    required: true,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: Book.name,
+  })
   book: Book;
 
   @Prop({ required: true })
   person: string;
 
   @Prop({ required: true })
-  borrowAt: Date;
+  borrowedAt: Date;
 
   @Prop()
-  returnAt: Date;
+  returnedAt: Date;
 }
 
 export const BorrowSchema = SchemaFactory.createForClass(Borrow);

@@ -1,23 +1,28 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AuthorsModule } from './modules/authors/authors.module';
 import { BooksModule } from './modules/books/books.module';
 import { BorrowsModule } from './modules/borrows/borrows.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { CloudinaryService } from './core/services/cloudinary/cloudinary.service';
+import { CoreModule } from './core/core.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     MongooseModule.forRootAsync({
       useFactory: () => ({
-        uri: 'mongodb+srv://touariasami:bwKUftryES0SlPsa@cluster0.j3zro.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',
+        uri: process.env.DB_URL,
       }),
     }),
     AuthorsModule,
     BooksModule,
     BorrowsModule,
+    AuthModule,
+    CoreModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

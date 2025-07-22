@@ -7,32 +7,62 @@ import {
   Param,
   Delete,
   Put,
+  Query,
 } from '@nestjs/common';
 import { BooksService } from './books.service';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
+import { ObjectId } from 'mongoose';
+import { QueryBooksDto } from './dto/query-books.dto';
+import { ApiOperation, ApiParam } from '@nestjs/swagger';
 
-@Controller('books')
+@Controller('')
 export class BooksController {
   constructor(private readonly booksService: BooksService) {}
 
-  @Post()
+  @ApiOperation({
+    summary: 'create book',
+  })
+  @Post('books')
   create(@Body() createBookDto: CreateBookDto) {
     return this.booksService.create(createBookDto);
   }
 
-  @Get()
-  findAll() {
-    return this.booksService.findAll();
+  @ApiOperation({
+    summary: 'get all books ',
+  })
+  @Get('books')
+  findAll(@Query() query: QueryBooksDto) {
+    return this.booksService.findAll(query);
   }
 
-  @Put(':id')
-  update(@Param('id') id: string, @Body() updateBookDto: UpdateBookDto) {
-    return this.booksService.update(+id, updateBookDto);
+  @ApiOperation({
+    summary: 'update book by providing _id',
+  })
+  @ApiParam({
+    name: 'id',
+  })
+  @Put('books/:id')
+  update(@Param('id') id: ObjectId, @Body() updateBookDto: UpdateBookDto) {
+    return this.booksService.update(id, updateBookDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.booksService.remove(+id);
+  @ApiOperation({
+    summary: 'delete book by providing _id',
+  })
+  @ApiParam({
+    name: 'id',
+  })
+  @Delete('books/:id')
+  remove(@Param('id') id: ObjectId) {
+    return this.booksService.remove(id);
+  }
+
+  @ApiOperation({
+    summary: 'get top genres',
+  })
+  @Get('top-genres')
+  topGenres() {
+    return this.booksService.topGenres();
   }
 }

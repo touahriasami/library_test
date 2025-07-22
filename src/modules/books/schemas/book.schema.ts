@@ -13,7 +13,11 @@ export class Book {
   @Prop({ required: true })
   genre: string;
 
-  @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'Author' })
+  @Prop({
+    required: true,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: Author.name,
+  })
   author: Author;
 
   @Prop({ required: true })
