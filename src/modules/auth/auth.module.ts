@@ -5,6 +5,9 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from './schemas/user.schema';
 import { HashingService } from './hashing/hashing.service';
 import { BcryptService } from './hashing/bcrypt.service';
+import { JwtModule } from '@nestjs/jwt';
+import jwtConfig from './config/jwt.config';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -14,6 +17,8 @@ import { BcryptService } from './hashing/bcrypt.service';
         schema: UserSchema,
       },
     ]),
+    JwtModule.registerAsync(jwtConfig.asProvider()),
+    ConfigModule.forFeature(jwtConfig),
   ],
   controllers: [AuthController],
   providers: [

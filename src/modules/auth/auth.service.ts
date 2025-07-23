@@ -1,4 +1,5 @@
 import {
+  Inject,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -9,12 +10,20 @@ import { User, UserSchema } from './schemas/user.schema';
 import { Model } from 'mongoose';
 import { HashingService } from './hashing/hashing.service';
 import { SignInDto } from './dtos/signin.dto';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigType } from '@nestjs/config';
+import jwtConfig from './config/jwt.config';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<User>,
     private readonly hashingService: HashingService,
+
+    private readonly jwtService: JwtService,
+
+    @Inject(jwtConfig.KEY)
+    private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
   ) {}
 
   async signup(signupDto: SignUpDto) {
@@ -48,7 +57,20 @@ export class AuthService {
       throw new UnauthorizedException('password doest not match');
     }
 
-    return true;
+    const accessToken = await this.jwtService.signAsync(
+      {
+        sub: user._id,
+        email: user.email,
+      },
+      {
+        audience: this.jwtConfiguration.audience,
+        issuer: this.jwtConfiguration.issuer,
+        secret: this.jwtConfiguration.secret,
+        expiresIn: this.jwtConfiguration.accessTokenTtl,
+      },
+    );
+
+    return { accessToken };
   }
 
   getUsers() {
