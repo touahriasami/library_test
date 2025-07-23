@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateAuthorDto } from './dto/create-author.dto';
 import { UpdateAuthorDto } from './dto/update-author.dto';
 import { InjectModel } from '@nestjs/mongoose';
@@ -18,6 +22,10 @@ export class AuthorsService {
   ) {}
 
   async create(createAuthorDto: CreateAuthorDto, photo: Express.Multer.File) {
+    if (!photo) {
+      throw new BadRequestException('Photo is required.');
+    }
+
     try {
       const data = await this.cloudinaryService.uploadPhoto(photo);
 
@@ -54,6 +62,10 @@ export class AuthorsService {
   }
 
   async updatePhoto(id: ObjectId, photo: Express.Multer.File) {
+    if (!photo) {
+      throw new BadRequestException('Photo is required.');
+    }
+
     try {
       const data = await this.cloudinaryService.uploadPhoto(photo);
 

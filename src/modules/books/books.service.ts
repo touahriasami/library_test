@@ -22,7 +22,6 @@ export class BooksService {
   findAll({ author, genre }: QueryBooksDto) {
     let match = {};
 
-    console.log('author : ', author);
     if (genre) {
       match['genre'] = genre;
     }

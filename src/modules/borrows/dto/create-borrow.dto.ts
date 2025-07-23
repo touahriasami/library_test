@@ -1,11 +1,10 @@
 import { Type } from 'class-transformer';
-import { IsDate, IsNotEmpty, IsOptional, IsString } from 'class-validator';
-import { ObjectId } from 'mongoose';
+import { IsMongoId, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateBorrowDto {
   @IsNotEmpty()
-  @IsString()
-  book: ObjectId;
+  @IsMongoId({ message: 'book must be a valid MongoDB ObjectId' })
+  book: string;
 
   @IsNotEmpty()
   @IsString()

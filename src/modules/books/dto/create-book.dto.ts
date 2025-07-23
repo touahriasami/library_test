@@ -1,5 +1,4 @@
-import { IsNotEmpty, IsString } from 'class-validator';
-import { ObjectId } from 'mongoose';
+import { IsMongoId, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateBookDto {
   @IsNotEmpty()
@@ -11,7 +10,8 @@ export class CreateBookDto {
   genre: string;
 
   @IsNotEmpty()
-  author: ObjectId;
+  @IsMongoId({ message: 'author must be a valid MongoDB ObjectId' })
+  author: string;
 
   @IsNotEmpty()
   availableCopies: number;

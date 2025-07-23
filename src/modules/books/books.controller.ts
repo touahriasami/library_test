@@ -14,7 +14,7 @@ import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
 import { ObjectId } from 'mongoose';
 import { QueryBooksDto } from './dto/query-books.dto';
-import { ApiOperation, ApiParam } from '@nestjs/swagger';
+import { ApiOperation, ApiParam, ApiQuery } from '@nestjs/swagger';
 
 @Controller('')
 export class BooksController {
@@ -30,6 +30,16 @@ export class BooksController {
 
   @ApiOperation({
     summary: 'get all books ',
+  })
+  @ApiQuery({
+    name: 'genre',
+    nullable: true,
+    example: 'programming',
+  })
+  @ApiQuery({
+    name: 'author',
+    nullable: true,
+    example: '687a7ced1a81a77e3673f93a',
   })
   @Get('books')
   findAll(@Query() query: QueryBooksDto) {

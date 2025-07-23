@@ -8,7 +8,4 @@ export class CreateAuthorDto {
   @IsString()
   @IsNotEmpty()
   lastname: string;
-
-  // @IsNotEmpty()
-  // photo: Express.Multer.File;
 }
